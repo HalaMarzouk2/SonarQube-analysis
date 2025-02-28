@@ -1,0 +1,13 @@
+{
+  "name": "jenkins-demo",
+  "version": "1.0.0",
+  "description": "Minimal Node.js app for CI/CD",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo 'No tests defined' && exit 0"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}

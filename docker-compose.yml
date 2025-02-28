@@ -1,0 +1,18 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    image: teqany-ganoby-app:${TAG:-latest}
+    # Use hostname to set the container's internal hostname
+    hostname: teqany-ganoby-app
+    container_name: teqany-ganoby-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - APP_NAME=Teqany Ganoby APP
+      - APP_VERSION=2.0.0
+      - DOCKER_IMAGE=teqany-ganoby-app
+      - DOCKER_TAG=${TAG:-latest}
+    restart: always
+    user: "1000:1000" # Runs container with non-root user

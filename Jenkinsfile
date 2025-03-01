@@ -9,6 +9,7 @@ pipeline {
         stage('build') {
             steps {
                 sh """
+                
             docker up --build -d
                  
 

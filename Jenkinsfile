@@ -9,8 +9,7 @@ pipeline {
         stage('build') {
             steps {
                 sh """
-docker-compose build --build-arg APP_VERSION=${APP_VERSION} --build-arg DOCKER_TAG=${DOCKER_TAG} && \
-                        docker-compose up -d
+            docker up --build -d
                  
 
                     

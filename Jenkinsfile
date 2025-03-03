@@ -1,12 +1,7 @@
 pipeline {
     agent any
 
-    environment {
-        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
-        APP_VERSION = "${BUILD_NUMBER}" 
-        DOCKER_TAG="${BUILD_NUMBER}"
-    
-    }
+   
 
     stages {
       
@@ -16,8 +11,8 @@ pipeline {
                     // Update the APP_VERSION in docker-compose.yml
                     sh """
                     echo ' hello halaaaaaaaa $APP_VERSION '
-                        sed -i 's/APP_VERSION=.*/APP_VERSION=${APP_VERSION}/' ${DOCKER_COMPOSE_FILE}
-                        sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${APP_VERSION}/' ${DOCKER_COMPOSE_FILE}
+                        sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
+                        sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${BUILD_NUMBER}/' ./docker-compose.yml
                         
                     """
                 }

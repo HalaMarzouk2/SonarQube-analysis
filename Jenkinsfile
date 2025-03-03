@@ -7,7 +7,7 @@ pipeline {
             steps {
                 
                     sh """
-                    echo ' hello halaaaaaaaa $BUILD_NUMBER '
+                    echo ' hello halaaaa $BUILD_NUMBER '
                         sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
                         sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${BUILD_NUMBER}/' ./docker-compose.yml
                         
@@ -15,7 +15,7 @@ pipeline {
             }
         }
 
-        stage('Build Docker Images') {
+        stage('Build Docker Compose and Run Container ') {
             steps {
                 sh """
                 docker-compose up --build -d

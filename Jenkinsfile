@@ -1,35 +1,28 @@
 pipeline {
     agent any
 
-   
-
     stages {
       
-     stage('Update APP_VERSION') {
+     stage('Vesion') {
             steps {
-                script {
-                    // Update the APP_VERSION in docker-compose.yml
+                
                     sh """
                     echo ' hello halaaaaaaaa $BUILD_NUMBER '
                         sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
                         sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${BUILD_NUMBER}/' ./docker-compose.yml
                         
                     """
-                }
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker-compose build'
-            }
+                sh """
+                docker-compose up --build -d
+                """
+           }
         }
 
-        stage('Run Docker Compose') {
-            steps {
-                sh 'docker-compose up -d'
-            }
-        }
     }
 
 

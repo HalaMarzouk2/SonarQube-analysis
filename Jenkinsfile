@@ -2,29 +2,36 @@ pipeline {
     agent any
 
     environment {
-        APP_VERSION = "${env.BUILD_NUMBER}"
+        DOCKER_COMPOSE_FILE = 'docker-compose.yml'
+        APP_VERSION = "${BUILD_NUMBER}"
     }
 
     stages {
-    
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/your-repo/your-project.git'
+            }
+        }
 
-       stage('Build Docker Images') {
+        stage('Update APP_VERSION') {
             steps {
                 script {
-                    // Update the App_VERSION in your Docker Compose file
-                    def dockerComposeFile = readFile('docker-compose.yml')
-                    dockerComposeFile = dockerComposeFile.replaceAll(/(?<=App_VERSION:\s)(\d+\.\d+\.\d+)/, env.APP_VERSION)
-                    writeFile file: 'docker-compose.yml', text: dockerComposeFile
-
-                    // Build the Docker Compose
-                    sh 'docker-compose build'
+                    // Update the APP_VERSION in docker-compose.yml
+                    sh """
+                        sed -i 's/APP_VERSION=.*/APP_VERSION=${APP_VERSION}/' ${DOCKER_COMPOSE_FILE}
+                    """
                 }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker-compose build'
             }
         }
 
         stage('Run Docker Compose') {
             steps {
-                // Run the application
                 sh 'docker-compose up -d'
             }
         }

@@ -10,7 +10,7 @@ pipeline {
                 script {
                     // Update the APP_VERSION in docker-compose.yml
                     sh """
-                    echo ' hello halaaaaaaaa $APP_VERSION '
+                    echo ' hello halaaaaaaaa $BUILD_NUMBER '
                         sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
                         sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${BUILD_NUMBER}/' ./docker-compose.yml
                         

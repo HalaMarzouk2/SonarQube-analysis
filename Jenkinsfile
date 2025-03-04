@@ -5,7 +5,6 @@ pipeline {
       
      stage('Vesion') {
             steps {
-                
                     sh """
                     echo ' hello halaaaa $BUILD_NUMBER '
                         sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
@@ -14,14 +13,26 @@ pipeline {
                     """
             }
         }
-
-        stage('Build Docker Compose and Run Container ') {
+        
+    stage('Build Docker Compose') {
             steps {
-                sh """
-                docker-compose up --build -d
-                """
-           }
+                script {
+                    // Use Docker Compose to build services
+                    dockerComposeBuild()
+                }
+            }
         }
+
+        stage('Run Docker Compose') {
+            steps {
+                script {
+                    // Use Docker Compose to start services
+                    dockerComposeUp()
+                }
+            }
+        }
+    
+        
 
     }
 

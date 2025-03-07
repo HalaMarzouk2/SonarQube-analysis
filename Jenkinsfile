@@ -34,20 +34,23 @@ pipeline {
 
 
 stage("Sonarqube Analysis") {
-           environment {
-    SCANNER_HOME = tool 'SonarQubeScanner'  // sonar-scanner is the name of the tool in the manage jenkins> tool configuration
-   }
+          environment {
+        SONARQUBE_SCANNER_HOME = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+    }
    steps {
     withSonarQubeEnv(installationName: 'SonarQubeScanner') {  //installationName is the name of sonar installation in manage jenkins>configure system
-     bat "%SCANNER_HOME%/bin/sonar-scanner \
-     -Dsonar.projectKey=demo-nodejs \
-     -Dsonar.token=sqp_c5290a80ea8686b0ea73fe53ed79af4858544632 \
-     -Dsonar.sources=. \
-     -Dsonar.host.url=http://localhost:9000 \
-     -Dsonar.inclusions=server.js \
-     -Dsonar.test.inclusions=index.test.js "
+     
     }
-   }
+   }    
+          sh """
+                        $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectKey=nodejs \
+                        -Dsonar.projectName=nodejs \
+                        -Dsonar.sources=. \
+                        -Dsonar.host.url=http://192.168.159.134:9000 \
+                        -Dsonar.login=sqa_a4645ae35c9a47a1fcecc3b3304a6b99cd11cc4b
+                        
+                    """
         }
 
 

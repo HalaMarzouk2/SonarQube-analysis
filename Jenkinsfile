@@ -31,6 +31,28 @@ pipeline {
            }
         }
 
+
+
+stage("Sonarqube Analysis") {
+           environment {
+    SCANNER_HOME = tool 'SonarQubeScanner'  // sonar-scanner is the name of the tool in the manage jenkins> tool configuration
+   }
+   steps {
+    withSonarQubeEnv(installationName: 'SonarQubeScanner') {  //installationName is the name of sonar installation in manage jenkins>configure system
+     bat "%SCANNER_HOME%/bin/sonar-scanner \
+     -Dsonar.projectKey=demo-nodejs \
+     -Dsonar.token=sqp_c5290a80ea8686b0ea73fe53ed79af4858544632 \
+     -Dsonar.sources=. \
+     -Dsonar.host.url=http://localhost:9000 \
+     -Dsonar.inclusions=server.js \
+     -Dsonar.test.inclusions=index.test.js "
+    }
+   }
+        }
+
+
+        
+
         
     }
 

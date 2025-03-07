@@ -1,48 +1,24 @@
 pipeline {
     agent any
 
+    environment {
+        SONARQUBE_SCANNER_HOME = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+    }
+
     stages {
 
-     stage('Vesion') {
+        stage('Install Dependencies') {
             steps {
-                
-                    sh """
-                    echo ' hello halaaaa $BUILD_NUMBER '
-                        sed -i 's/APP_VERSION=.*/APP_VERSION=${BUILD_NUMBER}/' ./docker-compose.yml
-                        sed -i 's/DOCKER_TAG=.*/DOCKER_TAG=${BUILD_NUMBER}/' ./docker-compose.yml
-                        
-                    """
+                sh 'npm install'
             }
         }
 
-        stage('Build Docker Compose ') {
-            steps {
-                sh """
-                docker compose build
-                """
-           }
-        }
         
-    stage('Run Container ') {
+
+        stage('SonarQube Analysis') {
             steps {
-                sh """
-                docker compose up -d
-                """
-           }
-        }
-
-
-
-stage("Sonarqube Analysis") {
-          environment {
-        SONARQUBE_SCANNER_HOME = tool name: 'SonarQubeScanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-    }
-   steps {
-    withSonarQubeEnv(installationName: 'SonarQubeScanner') {  //installationName is the name of sonar installation in manage jenkins>configure system
-     
-    }
-   }    
-          sh """
+                withSonarQubeEnv('SonarQube') {
+                    sh """
                         $SONARQUBE_SCANNER_HOME/bin/sonar-scanner \
                         -Dsonar.projectKey=nodejs \
                         -Dsonar.projectName=nodejs \
@@ -51,13 +27,8 @@ stage("Sonarqube Analysis") {
                         -Dsonar.login=sqa_a4645ae35c9a47a1fcecc3b3304a6b99cd11cc4b
                         
                     """
+                }
+            }
         }
-
-
-        
-
-        
     }
-
-
 }
